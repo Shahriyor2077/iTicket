@@ -18,6 +18,7 @@ import { CustomerService } from "src/customer/customer.service";
 import { InjectModel } from "@nestjs/mongoose";
 import { Customer, CustomerSchema } from "src/customer/schemas/customer.schema";
 import { Model } from "mongoose";
+import { LoginCustomerDto } from "src/customer/dto/login-customer.dto";
 
 @Injectable()
 export class AuthService {
@@ -67,11 +68,11 @@ export class AuthService {
     if (!admin) {
       throw new UnauthorizedException("Email yoki passwprd noto'g'ri");
     }
-    const isVAlidPassword = await bcrypt.compare(
+    const isValidPassword = await bcrypt.compare(
       loginDto.password,
       admin.hashed_password
     );
-    if (!isVAlidPassword) {
+    if (!isValidPassword) {
       throw new UnauthorizedException("Email yoki passwprd noto'g'ri");
     }
 
@@ -145,12 +146,50 @@ export class AuthService {
     return { message: "Logged out successfully" };
   }
 
-  async register(createCustomerDto: CreateCustomerDto){
-    const candidate=await this.customerSchema.findOne({email: createCustomerDto.email})
-    if(candidate){
-      throw new ConflictException("Bunday email mavjud")
+  async register(createCustomerDto: CreateCustomerDto) {
+    const candidate = await this.customerSchema.findOne({
+      email: createCustomerDto.email,
+    });
+    if (candidate) {
+      throw new ConflictException("Bunday email mavjud");
     }
-    const customer=await this.customerSchema.create(createCustomerDto)
-    return {customerId: customer._id}
+    const customer = await this.customerSchema.create(createCustomerDto);
+    return { customerId: customer._id };
+  }
+
+  async customerLogin(dto: LoginCustomerDto, res: Response) {
+    const customer = await this.customerSchema.findOne({
+      phone_number: dto.phone,
+    });
+    if (!customer) {
+      throw new UnauthorizedException("Telefon raqam yoki parol notogri");
+    }
+    const isMatch = await bcrypt.compare(
+      dto.password,
+      customer.hashed_password
+    );
+    if (!isMatch) {
+      throw new UnauthorizedException("Telefon raqam yoki parol notogri");
+    }
+    const payload = {
+      id: customer._id,
+      phone: customer.phone_number,
+      email: customer.email,
+    };
+    const accessToken = await this.jwtService.signAsync(payload, {
+      secret: process.env.ACCESS_TOKEN_KEY,
+      expiresIn: process.env.ACCESS_TOKEN_TIME,
+    });
+    const refreshToken = await this.jwtService.signAsync(payload, {
+      secret: process.env.REFRESH_TOKEN_KEY,
+      expiresIn: process.env.REFRESH_TOKEN_TIME,
+    });
+    customer.hashed_refresh_token = await bcrypt.hash(refreshToken, 7);
+    await customer.save();
+    res.cookie("refreshToken", refreshToken, {
+      maxAge: +process.env.COOKIE_TIME!,
+      httpOnly: true,
+    });
+    return { accessToken };
   }
 }
