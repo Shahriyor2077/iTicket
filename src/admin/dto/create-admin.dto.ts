@@ -1,7 +1,18 @@
+import { IsString, IsNumber } from "class-validator";
+
 export class CreateAdminDto {
-  full_name: string;
+  @IsString()
+  first_name: string;
+
+  @IsString()
+  last_name: string;
+
+  @IsString()
   email: string;
+
+  @IsString()
   password: string;
-  phone_number: string;
+
+  @IsString()
   confirm_password: string;
 }

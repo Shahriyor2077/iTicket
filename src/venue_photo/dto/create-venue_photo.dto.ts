@@ -1,4 +1,9 @@
+import { IsString, IsNumber } from "class-validator";
+
 export class CreateVenuePhotoDto {
-    venue_id: number
-    url: string
+  @IsString()
+  url: string;
+
+  @IsString()
+  venue_id: string;
 }

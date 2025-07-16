@@ -19,6 +19,9 @@ import { Request, Response } from "express";
 import { CreateAdminDto } from "../admin/dto/create-admin.dto";
 import { CookieGetter } from "../common/decorators/cookie-getter.decorator";
 import { CreateCustomerDto } from "src/customer/dto/create-customer.dto";
+import { ApiTags, ApiOperation, ApiBody, ApiResponse } from "@nestjs/swagger";
+import { LoginCustomerDto } from "src/customer/dto/login-customer.dto";
+@ApiTags("Customer Auth")
 @Controller("auth")
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
@@ -51,16 +54,24 @@ export class AuthController {
     return this.authService.logout(refeshToken, res);
   }
 
-  @Post("/registerCustomer")
-  register(@Body() createCustomerDto: CreateCustomerDto) {
-    return this.authService.register(createCustomerDto);
-  }
-
-  @Post("/login")
+  @ApiOperation({ summary: "Customer login" })
+  @ApiBody({
+    schema: {
+      example: {
+        phone: "+998901234567",
+        password: "parol123",
+      },
+    },
+  })
+  @ApiResponse({
+    status: 201,
+    description: "Customer muvaffaqiyatli login qildi.",
+  })
+  @Post("/customer-login")
   customerLogin(
-    @Body() loginDto: LoginDto,
+    @Body() loginDto: LoginCustomerDto,
     @Res({ passthrough: true }) res: Response
   ) {
-    return this.authService.login(loginDto, res);
+    return this.authService.customerLogin(loginDto, res);
   }
 }

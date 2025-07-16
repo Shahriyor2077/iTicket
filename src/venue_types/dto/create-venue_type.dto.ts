@@ -1,4 +1,6 @@
+import { IsString, IsNumber } from "class-validator";
+
 export class CreateVenueTypeDto {
-  venue_id: number
-  type_id: number
+  @IsString()
+  name: string;
 }

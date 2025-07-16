@@ -1,8 +1,21 @@
+import { IsString, IsNumber } from "class-validator";
+
 export class CreateSeatDto {
-    sector: number
-    row_number: number
-    number: number
-    set_type_id: string
-    venue_id: string
-    location_type_schema: string
+  @IsNumber()
+  sector: number;
+
+  @IsNumber()
+  row_number: number;
+
+  @IsNumber()
+  number: number;
+
+  @IsString()
+  set_type_id: string;
+
+  @IsString()
+  venue_id: string;
+
+  @IsString()
+  location_type_schema: string;
 }
