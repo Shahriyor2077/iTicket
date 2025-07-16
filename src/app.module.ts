@@ -20,6 +20,9 @@ import { CustomerModule } from "./customer/customer.module";
 import { VenueTypesModule } from "./venue_types/venue_types.module";
 import { VenuePhotoModule } from "./venue_photo/venue_photo.module";
 import { SeatModule } from "./seat/seat.module";
+import { EventModule } from './event/event.module';
+import { EventTypeModule } from './event_type/event_type.module';
+import { TicketModule } from './ticket/ticket.module';
 
 
 @Module({
@@ -44,7 +47,10 @@ import { SeatModule } from "./seat/seat.module";
     VenueTypesModule,
     VenuePhotoModule,
     SeatModule,
-    SetTypeModule, 
+    SetTypeModule,
+    EventModule,
+    EventTypeModule,
+    TicketModule, 
   ],
   controllers: [],
   providers: [AppService],
