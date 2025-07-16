@@ -51,8 +51,16 @@ export class AuthController {
     return this.authService.logout(refeshToken, res);
   }
 
-  @Post("/register")
+  @Post("/registerCustomer")
   register(@Body() createCustomerDto: CreateCustomerDto) {
     return this.authService.register(createCustomerDto);
+  }
+
+  @Post("/login")
+  customerLogin(
+    @Body() loginDto: LoginDto,
+    @Res({ passthrough: true }) res: Response
+  ) {
+    return this.authService.login(loginDto, res);
   }
 }
