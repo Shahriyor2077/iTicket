@@ -1,4 +1,4 @@
-import { IsString, IsNumber } from "class-validator";
+import { IsString } from "class-validator";
 
 export class CreateAdminDto {
   @IsString()
@@ -16,3 +16,4 @@ export class CreateAdminDto {
   @IsString()
   confirm_password: string;
 }
+

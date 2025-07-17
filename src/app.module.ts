@@ -23,6 +23,9 @@ import { SeatModule } from "./seat/seat.module";
 import { EventModule } from './event/event.module';
 import { EventTypeModule } from './event_type/event_type.module';
 import { TicketModule } from './ticket/ticket.module';
+import { CardItemModule } from './card_item/card_item.module';
+import { CardModule } from './card/card.module';
+import { BookingModule } from './booking/booking.module';
 
 
 @Module({
@@ -50,7 +53,10 @@ import { TicketModule } from './ticket/ticket.module';
     SetTypeModule,
     EventModule,
     EventTypeModule,
-    TicketModule, 
+    TicketModule,
+    CardItemModule,
+    CardModule,
+    BookingModule, 
   ],
   controllers: [],
   providers: [AppService],

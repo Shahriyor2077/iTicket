@@ -29,7 +29,7 @@ export class SeatService {
       throw new BadRequestException("Venue ID noto'g'ri");
     }
     const venue = await this.venueSchema.findById(venue_id);
-    if (venue) {
+    if (!venue) {
       throw new BadRequestException("Bunday Venue yo'q");
     }
 

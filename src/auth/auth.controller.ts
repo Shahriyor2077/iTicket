@@ -74,4 +74,9 @@ export class AuthController {
   ) {
     return this.authService.customerLogin(loginDto, res);
   }
+
+  @Post("/registerCustomer")
+  register(@Body() createCustomerDto: CreateCustomerDto) {
+    return this.authService.register(createCustomerDto);
+  }
 }
